@@ -2901,21 +2901,15 @@
         body: JSON.stringify({ email: email })
       });
 
-      if (response.status === 201 || response.status === 204) {
-        // Success - increment counter
+      const data = await response.json();
+      if (data.success) {
         waitlistCount++;
         localStorage.setItem('wickWaitlist', waitlistCount);
         document.getElementById('waitlistNum').textContent = waitlistCount;
         input.value = '';
         showToast('🔥 You are on the list. See you August 1st!');
-      } else if (response.status === 400) {
-        // Contact might already exist
-        const data = await response.json();
-        if (data.code === 'duplicate_parameter') {
-          showToast('👀 You are already on the list!');
-        } else {
-          showToast('⚠️ Something went wrong. Try again.');
-        }
+      } else if (data.duplicate) {
+        showToast('👀 You are already on the list!');
       } else {
         showToast('⚠️ Something went wrong. Try again.');
       }
