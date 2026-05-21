@@ -1624,13 +1624,10 @@
     Wick was built to fix that.
   </p>
 
-  <form action="https://thewickapp.us3.list-manage.com/subscribe/post?u=5104dbfd76aa24671ef591191&id=a484320895&f_id=0031ace2f0" method="post" target="_blank" id="waitlist">
-    <div class="waitlist-form" style="opacity:1;animation:none;">
-      <input type="email" name="EMAIL" class="waitlist-input" id="emailInput" placeholder="your@email.com" required>
-      <div aria-hidden="true" style="position:absolute;left:-5000px"><input type="text" name="b_5104dbfd76aa24671ef591191_a484320895" tabindex="-1" value=""></div>
-      <button type="submit" class="waitlist-btn">JOIN WAITLIST</button>
-    </div>
-  </form>
+  <div class="waitlist-form" style="opacity:1;animation:none;" id="waitlist">
+    <input type="email" class="waitlist-input" id="emailInput" placeholder="your@email.com">
+    <button class="waitlist-btn" onclick="joinBrevoWaitlist('emailInput')">JOIN WAITLIST</button>
+  </div>
   <div class="waitlist-count">
     <span id="waitlistNum">0</span> traders already on the list
   </div>
@@ -2330,13 +2327,10 @@
 <section class="final-cta">
   <h2 class="final-title">Stop Trading<br>Against <em>Yourself.</em></h2>
   <p style="font-size:16px;color:var(--text-muted);margin-bottom:40px;line-height:1.8;">Join traders who are building the discipline,<br>structure, and self awareness to finally get consistent.</p>
-  <form action="https://thewickapp.us3.list-manage.com/subscribe/post?u=5104dbfd76aa24671ef591191&id=a484320895&f_id=0031ace2f0" method="post" target="_blank">
-    <div class="waitlist-form" style="opacity:1;animation:none;justify-content:center;">
-      <input type="email" name="EMAIL" class="waitlist-input" id="emailInput2" placeholder="your@email.com" required>
-      <div aria-hidden="true" style="position:absolute;left:-5000px"><input type="text" name="b_5104dbfd76aa24671ef591191_a484320895" tabindex="-1" value=""></div>
-      <button type="submit" class="waitlist-btn">GET EARLY ACCESS</button>
-    </div>
-  </form>
+  <div class="waitlist-form" style="opacity:1;animation:none;justify-content:center;">
+    <input type="email" class="waitlist-input" id="emailInput2" placeholder="your@email.com">
+    <button class="waitlist-btn" onclick="joinBrevoWaitlist('emailInput2')">GET EARLY ACCESS</button>
+  </div>
 </section>
 
 <!-- FOOTER -->
@@ -2881,6 +2875,56 @@
     const isOpen = item.classList.contains('open');
     document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
     if (!isOpen) item.classList.add('open');
+  }
+
+
+  // Brevo waitlist integration
+  async function joinBrevoWaitlist(inputId) {
+    const input = document.getElementById(inputId);
+    const email = input.value.trim();
+    if (!email || !email.includes('@')) {
+      showToast('⚠️ Please enter a valid email.');
+      return;
+    }
+
+    const btn = input.nextElementSibling;
+    const originalText = btn.textContent;
+    btn.textContent = 'JOINING...';
+    btn.disabled = true;
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+      });
+
+      if (response.status === 201 || response.status === 204) {
+        // Success - increment counter
+        waitlistCount++;
+        localStorage.setItem('wickWaitlist', waitlistCount);
+        document.getElementById('waitlistNum').textContent = waitlistCount;
+        input.value = '';
+        showToast('🔥 You are on the list. See you August 1st!');
+      } else if (response.status === 400) {
+        // Contact might already exist
+        const data = await response.json();
+        if (data.code === 'duplicate_parameter') {
+          showToast('👀 You are already on the list!');
+        } else {
+          showToast('⚠️ Something went wrong. Try again.');
+        }
+      } else {
+        showToast('⚠️ Something went wrong. Try again.');
+      }
+    } catch (err) {
+      showToast('⚠️ Connection error. Try again.');
+    }
+
+    btn.textContent = originalText;
+    btn.disabled = false;
   }
 
 </script>
