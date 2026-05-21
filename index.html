@@ -2475,8 +2475,24 @@
   })();
 
   // Waitlist
-  let waitlistCount = parseInt(localStorage.getItem('wickWaitlist') || '0');
-  document.getElementById('waitlistNum').textContent = waitlistCount;
+  let waitlistCount = 0;
+
+  // Fetch real count from Brevo via our API
+  async function fetchWaitlistCount() {
+    try {
+      const response = await fetch('/api/count');
+      if (response.ok) {
+        const data = await response.json();
+        waitlistCount = data.count || 0;
+        document.getElementById('waitlistNum').textContent = waitlistCount;
+      }
+    } catch (err) {
+      // Fall back to localStorage
+      waitlistCount = parseInt(localStorage.getItem('wickWaitlist') || '0');
+      document.getElementById('waitlistNum').textContent = waitlistCount;
+    }
+  }
+  fetchWaitlistCount();
 
   function joinWaitlist() {
     const email = document.getElementById('emailInput').value.trim();
