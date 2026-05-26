@@ -1357,6 +1357,226 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* ── SCROLL REVEAL EFFECTS ────────────────────────────────────── */
+  /* Sections fade up with a slight scale-in when scrolled into view */
+  .reveal {
+    opacity: 0;
+    transform: translateY(48px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.94) translateY(40px);
+    transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+  .reveal-scale.in-view { opacity: 1; transform: scale(1) translateY(0); }
+
+  /* Title with clip-reveal — text wipes up from below */
+  .reveal-clip {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(20px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-clip.in-view {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+
+  /* Grids cascade their children in with a stagger */
+  .stagger > * {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+  .stagger.in-view > * { opacity: 1; transform: translateY(0) scale(1); }
+  .stagger.in-view > *:nth-child(1)  { transition-delay: 0.00s; }
+  .stagger.in-view > *:nth-child(2)  { transition-delay: 0.05s; }
+  .stagger.in-view > *:nth-child(3)  { transition-delay: 0.10s; }
+  .stagger.in-view > *:nth-child(4)  { transition-delay: 0.15s; }
+  .stagger.in-view > *:nth-child(5)  { transition-delay: 0.20s; }
+  .stagger.in-view > *:nth-child(6)  { transition-delay: 0.25s; }
+  .stagger.in-view > *:nth-child(7)  { transition-delay: 0.30s; }
+  .stagger.in-view > *:nth-child(8)  { transition-delay: 0.35s; }
+  .stagger.in-view > *:nth-child(9)  { transition-delay: 0.40s; }
+  .stagger.in-view > *:nth-child(10) { transition-delay: 0.45s; }
+  .stagger.in-view > *:nth-child(11) { transition-delay: 0.50s; }
+  .stagger.in-view > *:nth-child(12) { transition-delay: 0.55s; }
+  .stagger.in-view > *:nth-child(13) { transition-delay: 0.60s; }
+  .stagger.in-view > *:nth-child(14) { transition-delay: 0.65s; }
+  .stagger.in-view > *:nth-child(15) { transition-delay: 0.70s; }
+  .stagger.in-view > *:nth-child(16) { transition-delay: 0.75s; }
+  .stagger.in-view > *:nth-child(17) { transition-delay: 0.80s; }
+  .stagger.in-view > *:nth-child(18) { transition-delay: 0.85s; }
+  .stagger.in-view > *:nth-child(19) { transition-delay: 0.90s; }
+  .stagger.in-view > *:nth-child(20) { transition-delay: 0.95s; }
+
+  /* Calendar day fill — each day pops in sequence */
+  .cal-grid.stagger-fast > * {
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .cal-grid.stagger-fast.in-view > * { opacity: 1; transform: scale(1); }
+
+  /* ── CURSOR SPOTLIGHT ────────────────────────────────────── */
+  /* Soft gold glow that follows the cursor and lights up the page */
+  .spotlight {
+    position: fixed;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,209,102,0.07) 0%, rgba(255,209,102,0.02) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.4s ease;
+    mix-blend-mode: screen;
+    opacity: 0;
+  }
+  .spotlight.active { opacity: 1; }
+
+  @media (max-width: 768px) {
+    .spotlight { display: none; }
+  }
+
+  /* ── SECTION PROGRESS DOTS (side nav) ────────────────────── */
+  .progress-dots {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 90;
+  }
+  .progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(255, 209, 102, 0.3);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+  .progress-dot:hover { border-color: var(--gold); transform: scale(1.2); }
+  .progress-dot.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 12px rgba(255, 209, 102, 0.6);
+    transform: scale(1.3);
+  }
+  .progress-dot::before {
+    content: attr(data-label);
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%) translateX(8px);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0;
+    transition: all 0.3s;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .progress-dot:hover::before,
+  .progress-dot.active::before {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  @media (max-width: 1100px) {
+    .progress-dots { display: none; }
+  }
+
+  /* ── HERO TITLE MAGNETIC ────────────────────────────────────── */
+  .hero-title {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ── VEGA ORB INTENSIFY ON VIEW ────────────────────── */
+  .vega-section.in-view .vega-orb-core {
+    animation: orbPulse 2s ease-in-out infinite;
+  }
+
+  /* ── PRICING CARD GLOW INTENSIFY ────────────────────── */
+  .pricing-card {
+    transition: box-shadow 1s ease, border-color 1s ease;
+  }
+  .pricing-card.in-view {
+    box-shadow: 0 30px 80px rgba(255, 209, 102, 0.08), 0 0 60px rgba(255, 209, 102, 0.04);
+    border-color: rgba(255, 209, 102, 0.25);
+  }
+
+  /* ── CARD 3D TILT ON HOVER ────────────────────── */
+  .hiw-card, .rank-card, .badge-card, .vega-feat {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  /* ── SECTION TITLE LETTER REVEAL ────────────────────── */
+  .section-title .word {
+    display: inline-block;
+    overflow: hidden;
+  }
+  .section-title .word > span {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .section-title.in-view .word > span {
+    transform: translateY(0);
+  }
+  .section-title.in-view .word:nth-child(1) > span { transition-delay: 0.05s; }
+  .section-title.in-view .word:nth-child(2) > span { transition-delay: 0.15s; }
+  .section-title.in-view .word:nth-child(3) > span { transition-delay: 0.25s; }
+  .section-title.in-view .word:nth-child(4) > span { transition-delay: 0.35s; }
+  .section-title.in-view .word:nth-child(5) > span { transition-delay: 0.45s; }
+
+  /* ── PRICE TICK FLASH (waitlist count update) ────────────────────── */
+  @keyframes priceTick {
+    0% { color: var(--gold); transform: scale(1); }
+    50% { color: var(--green); transform: scale(1.15); }
+    100% { color: var(--gold); transform: scale(1); }
+  }
+  .price-tick { animation: priceTick 0.6s ease-out; }
+
+  /* ── SECTION ENTER GLOW ────────────────────── */
+  /* Subtle gold accent line that draws across the top of major sections */
+  .section-accent {
+    position: relative;
+  }
+  .section-accent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    transform: translateX(-50%);
+    transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .section-accent.in-view::before {
+    width: 240px;
+  }
 </style>
 </head>
 <body>
@@ -1364,6 +1584,21 @@
 <!-- ── TICKER (fixed top bar) ───────────────────────────── -->
 <div class="ticker">
   <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<!-- Cursor spotlight (follows mouse, lights up the page) -->
+<div class="spotlight" id="spotlight"></div>
+
+<!-- Section progress indicator dots -->
+<div class="progress-dots" id="progressDots">
+  <a href="#waitlist"  class="progress-dot" data-label="Top"></a>
+  <a href="#features"  class="progress-dot" data-label="How it works"></a>
+  <a href="#ranks"     class="progress-dot" data-label="Ranks"></a>
+  <a href="#badges"    class="progress-dot" data-label="Badges"></a>
+  <a href="#vega"      class="progress-dot" data-label="VEGA"></a>
+  <a href="#calendar"  class="progress-dot" data-label="Calendar"></a>
+  <a href="#simulator" class="progress-dot" data-label="Simulator"></a>
+  <a href="#pricing"   class="progress-dot" data-label="Pricing"></a>
 </div>
 
 <div class="cursor"></div>
@@ -1410,14 +1645,14 @@
 </section>
 
 <!-- ── HOW IT WORKS ───────────────────────────── -->
-<section class="content" id="features">
-  <div class="section-eyebrow">How It Works</div>
-  <h2 class="section-title">Trade. Reflect. <em>Improve.</em></h2>
-  <p class="section-lede">
+<section class="content section-accent" id="features">
+  <div class="section-eyebrow reveal">How It Works</div>
+  <h2 class="section-title reveal-clip">Trade. Reflect. <em>Improve.</em></h2>
+  <p class="section-lede reveal">
     Most traders never log their sessions. The ones who do? They get better faster. Wick is built around
     the loop that compounds — <strong>log every session, review the data, hold yourself accountable.</strong>
   </p>
-  <div class="hiw-grid">
+  <div class="hiw-grid stagger">
     <div class="hiw-card">
       <div class="hiw-num">01</div>
       <div class="hiw-icon">📋</div>
@@ -1440,47 +1675,47 @@
 </section>
 
 <!-- ── RANKS ───────────────────────────── -->
-<section class="content ranks-section" id="ranks">
-  <div class="section-eyebrow">The Ranks</div>
-  <h2 class="section-title">12 Tiers. <em>Earn Every One.</em></h2>
-  <p class="section-lede">
+<section class="content ranks-section section-accent" id="ranks">
+  <div class="section-eyebrow reveal">The Ranks</div>
+  <h2 class="section-title reveal-clip">12 Tiers. <em>Earn Every One.</em></h2>
+  <p class="section-lede reveal">
     Every action inside Wick earns XP. Logging a session. Writing your lessons. Following your plan.
     No-trade days. Streaks. <strong>Consistency is the only path up.</strong>
   </p>
-  <div class="ranks-grid" id="ranksGrid"></div>
+  <div class="ranks-grid stagger" id="ranksGrid"></div>
 </section>
 
 <!-- ── BADGES ───────────────────────────── -->
-<section class="content badges-section">
-  <div class="section-eyebrow">Badges</div>
-  <h2 class="section-title">20 Badges. <em>Earn Your Story.</em></h2>
-  <p class="section-lede">
+<section class="content badges-section section-accent" id="badges">
+  <div class="section-eyebrow reveal">Badges</div>
+  <h2 class="section-title reveal-clip">20 Badges. <em>Earn Your Story.</em></h2>
+  <p class="section-lede reveal">
     Every badge represents a milestone. <strong>First Blood</strong> for your first logged session.
     <strong>Iron Hands</strong> for ten. <strong>Ten Bagger</strong> for $10k total P&L. <strong>OG Wick</strong>
     for the first 100 users. Common to legendary — collect them all.
   </p>
-  <div class="rarity-legend">
+  <div class="rarity-legend reveal">
     <div class="rarity-pill"><span class="rarity-dot" style="background:#aaa"></span>Common</div>
     <div class="rarity-pill"><span class="rarity-dot" style="background:#00ff88"></span>Uncommon</div>
     <div class="rarity-pill"><span class="rarity-dot" style="background:#4CC9F0"></span>Rare</div>
     <div class="rarity-pill"><span class="rarity-dot" style="background:#7C5CFC"></span>Epic</div>
     <div class="rarity-pill"><span class="rarity-dot" style="background:#FFD166"></span>Legendary</div>
   </div>
-  <div class="badges-grid" id="badgesGrid"></div>
+  <div class="badges-grid stagger" id="badgesGrid"></div>
 </section>
 
 <!-- ── VEGA ───────────────────────────── -->
-<section class="vega-section" id="vega">
+<section class="vega-section section-accent" id="vega">
   <div class="vega-layout">
     <div class="vega-content">
-      <div class="section-eyebrow">Meet VEGA</div>
-      <h2 class="section-title">Your AI in <em>your corner.</em></h2>
-      <p class="section-lede">
+      <div class="section-eyebrow reveal">Meet VEGA</div>
+      <h2 class="section-title reveal-clip">Your AI in <em>your corner.</em></h2>
+      <p class="section-lede reveal">
         VEGA is the AI trading assistant built into Wick. Voice-enabled. Sharp. Knows trading psychology
         and risk management cold. <strong>She doesn't sugarcoat. She doesn't tell you what you want to hear.</strong>
         She's the coach you call before you press the button — and after you blow up the account.
       </p>
-      <div class="vega-features">
+      <div class="vega-features stagger">
         <div class="vega-feat">
           <div class="vega-feat-icon">🎤</div>
           <div class="vega-feat-text">
@@ -1504,7 +1739,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="reveal-scale">
       <div class="vega-orb">
         <div class="vega-orb-ring"></div>
         <div class="vega-orb-ring"></div>
@@ -1518,7 +1753,7 @@
     </div>
   </div>
 
-  <div class="vega-chat">
+  <div class="vega-chat reveal-scale">
     <div class="vega-chat-header">
       <span class="pulse-dot"></span>
       <span class="vega-chat-title">VEGA</span>
@@ -1542,16 +1777,16 @@
 </section>
 
 <!-- ── CALENDAR ───────────────────────────── -->
-<section class="content calendar-section">
-  <div class="section-eyebrow">Trading Calendar</div>
-  <h2 class="section-title">See your edge <em>in color.</em></h2>
-  <p class="section-lede">
+<section class="content calendar-section section-accent" id="calendar">
+  <div class="section-eyebrow reveal">Trading Calendar</div>
+  <h2 class="section-title reveal-clip">See your edge <em>in color.</em></h2>
+  <p class="section-lede reveal">
     Every day you log appears on the calendar. Green for profit. Red for loss. Gold for breakeven.
     <strong>Click any day to see the full session breakdown.</strong> Spot streaks. Spot revenge sessions.
     Spot the days of the week you crush — and the ones you should sit out.
   </p>
   <div class="cal-layout">
-    <div>
+    <div class="reveal">
       <div class="cal-stats">
         <div class="cal-stat">
           <div class="cal-stat-label">Monthly P&L</div>
@@ -1576,7 +1811,7 @@
       </p>
       <p style="font-size:12px;color:var(--text-muted);margin-top:8px;font-family:'DM Mono',monospace;letter-spacing:1px;">— Beta tester, May 2026</p>
     </div>
-    <div class="cal-widget">
+    <div class="cal-widget reveal-scale">
       <div class="cal-header">
         <div class="cal-month">May 2026</div>
         <div class="cal-month-nav">
@@ -1587,7 +1822,7 @@
       <div class="cal-daynames">
         <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
       </div>
-      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-grid stagger-fast" id="calGrid"></div>
       <div class="cal-legend">
         <div class="cal-legend-item"><div class="cal-legend-sq" style="background:rgba(0,255,136,0.15);border:1px solid rgba(0,255,136,0.25)"></div>Profit</div>
         <div class="cal-legend-item"><div class="cal-legend-sq" style="background:rgba(255,68,102,0.15);border:1px solid rgba(255,68,102,0.25)"></div>Loss</div>
@@ -1598,16 +1833,16 @@
 </section>
 
 <!-- ── SIMULATOR ───────────────────────────── -->
-<section class="content">
-  <div class="section-eyebrow">Paper Trading Simulator</div>
-  <h2 class="section-title">Real data. <em>Zero risk.</em></h2>
-  <p class="section-lede">
+<section class="content section-accent" id="simulator">
+  <div class="section-eyebrow reveal">Paper Trading Simulator</div>
+  <h2 class="section-title reveal-clip">Real data. <em>Zero risk.</em></h2>
+  <p class="section-lede reveal">
     Full TradingView charts. Forex, equities, crypto. Real-time prices. Drag-and-drop stop loss and take profit
     lines. Built-in risk management with daily loss limits and max drawdown. <strong>Practice like a funded
     trader. Build the reps. Earn XP either way.</strong>
   </p>
 
-  <div class="sim-mock">
+  <div class="sim-mock reveal-scale">
     <div class="sim-topbar">
       <div class="sim-topbar-item">
         <div>
@@ -1667,15 +1902,15 @@
 </section>
 
 <!-- ── COMMUNITY ───────────────────────────── -->
-<section class="content">
-  <div class="section-eyebrow">The Trading Floor</div>
-  <h2 class="section-title">Your <em>daily tribe.</em></h2>
-  <p class="section-lede">
+<section class="content section-accent">
+  <div class="section-eyebrow reveal">The Trading Floor</div>
+  <h2 class="section-title reveal-clip">Your <em>daily tribe.</em></h2>
+  <p class="section-lede reveal">
     Every day at midnight the chat resets. A fresh slate. No noise from last week — just today's traders,
     today's market, today's ideas. Share setups, call levels, hold each other accountable.
     <strong>This is your floor.</strong>
   </p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px;">
+  <div class="stagger" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px;">
     <div class="hiw-card">
       <div class="hiw-icon">💬</div>
       <div class="hiw-title">24H Live Chat</div>
@@ -1700,13 +1935,13 @@
 </section>
 
 <!-- ── PRICING ───────────────────────────── -->
-<section class="content pricing-section" id="pricing">
-  <div class="section-eyebrow">Pricing</div>
-  <h2 class="section-title">One plan. <em>Full access.</em></h2>
-  <p class="section-lede" style="margin-left:auto;margin-right:auto;text-align:center;">
+<section class="content pricing-section section-accent" id="pricing">
+  <div class="section-eyebrow reveal">Pricing</div>
+  <h2 class="section-title reveal-clip">One plan. <em>Full access.</em></h2>
+  <p class="section-lede reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
     No tiers. No upsells. <strong>One price. Everything inside.</strong>
   </p>
-  <div class="pricing-card">
+  <div class="pricing-card reveal-scale">
     <div class="pricing-tier">Wick Membership</div>
     <div class="pricing-price">
       <span class="pricing-amount">$9.99</span>
@@ -1730,10 +1965,10 @@
 </section>
 
 <!-- ── FAQ ───────────────────────────── -->
-<section class="content">
-  <div class="section-eyebrow">Questions</div>
-  <h2 class="section-title">The <em>quick answers.</em></h2>
-  <div class="faq-list">
+<section class="content section-accent">
+  <div class="section-eyebrow reveal">Questions</div>
+  <h2 class="section-title reveal-clip">The <em>quick answers.</em></h2>
+  <div class="faq-list stagger">
     <div class="faq-item">
       <button class="faq-question" onclick="toggleFaq(this)">When does Wick launch?</button>
       <div class="faq-answer"><div class="faq-answer-inner">Public launch is July 1st, 2026. Waitlist members get first access and locked-in early pricing.</div></div>
@@ -1812,8 +2047,10 @@
   const CANDLE_WIDTH = 44;       // visual width of each candle body
   const CANDLE_SPACING = 58;     // distance between candle centers
   const SCROLL_SPEED = 0.35;     // pixels per frame (~21 px/sec at 60fps)
-  const CANDLE_OPACITY = 0.14;   // background subtlety
+  const CANDLE_OPACITY = 0.24;   // background presence (higher = more visible)
   const LERP = 0.05;             // smaller = smoother, slower price motion
+  const PRICE_MIN_PCT = 0.08;    // top boundary as % of canvas height
+  const PRICE_MAX_PCT = 0.92;    // bottom boundary as % of canvas height
 
   let candles = [];
 
@@ -1833,12 +2070,12 @@
   function makeHistoricalCandle(x, prevClose) {
     const centerY = canvas.height / 2;
     const open = prevClose;
-    const drift = (centerY - open) * 0.04;
-    const body = (Math.random() - 0.5) * 42 + drift;
+    const drift = (centerY - open) * 0.03;
+    const body = (Math.random() - 0.5) * 70 + drift;
     let close = open + body;
-    close = Math.max(canvas.height * 0.18, Math.min(canvas.height * 0.82, close));
-    const wickTop = 6 + Math.random() * 14;
-    const wickBot = 6 + Math.random() * 14;
+    close = Math.max(canvas.height * PRICE_MIN_PCT, Math.min(canvas.height * PRICE_MAX_PCT, close));
+    const wickTop = 8 + Math.random() * 26;
+    const wickBot = 8 + Math.random() * 26;
     return {
       x,
       open, close,
@@ -1898,9 +2135,9 @@
     const centerY = canvas.height / 2;
 
     if (timestamp > nextTargetTime) {
-      const drift = (centerY - livePrice) * 0.08;
-      priceTarget = livePrice + (Math.random() - 0.5) * 90 + drift;
-      priceTarget = Math.max(canvas.height * 0.2, Math.min(canvas.height * 0.8, priceTarget));
+      const drift = (centerY - livePrice) * 0.06;
+      priceTarget = livePrice + (Math.random() - 0.5) * 140 + drift;
+      priceTarget = Math.max(canvas.height * PRICE_MIN_PCT, Math.min(canvas.height * PRICE_MAX_PCT, priceTarget));
       nextTargetTime = timestamp + 300 + Math.random() * 500;
     }
 
@@ -2226,6 +2463,238 @@
   }
   window.joinBrevoWaitlist = joinBrevoWaitlist;
   window.toggleFaq = toggleFaq;
+
+  // ── SCROLL REVEAL (IntersectionObserver) ──
+  // Add .in-view to any element with .reveal, .reveal-scale, .reveal-clip,
+  // .stagger, .stagger-fast, or .section-accent when it enters the viewport.
+  const revealSelector = '.reveal, .reveal-scale, .reveal-clip, .stagger, .stagger-fast, .section-accent, .vega-section, .pricing-card, .section-title';
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll(revealSelector).forEach(el => revealObserver.observe(el));
+
+  // ── WRAP SECTION TITLES IN WORDS FOR CLIP-REVEAL ──
+  // Split each section title's text nodes into spans for staggered word reveal.
+  document.querySelectorAll('.section-title').forEach(title => {
+    const walk = (node) => {
+      const children = Array.from(node.childNodes);
+      children.forEach(child => {
+        if (child.nodeType === 3) {
+          // text node — split into word spans
+          const words = child.textContent.split(/(\s+)/).filter(w => w.length);
+          const frag = document.createDocumentFragment();
+          words.forEach(w => {
+            if (/^\s+$/.test(w)) {
+              frag.appendChild(document.createTextNode(w));
+            } else {
+              const wordEl = document.createElement('span');
+              wordEl.className = 'word';
+              const inner = document.createElement('span');
+              inner.textContent = w;
+              wordEl.appendChild(inner);
+              frag.appendChild(wordEl);
+            }
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === 1 && child.tagName === 'EM') {
+          // em — wrap whole element in a word span
+          const wordEl = document.createElement('span');
+          wordEl.className = 'word';
+          const inner = document.createElement('span');
+          inner.style.display = 'inline-block';
+          // Move em contents into inner
+          while (child.firstChild) inner.appendChild(child.firstChild);
+          child.appendChild(inner);
+          // Wrap the em itself
+          child.parentNode.insertBefore(wordEl, child);
+          wordEl.appendChild(child);
+          // The inner span gets the transform — but em is inside .word now
+          // Easier: just leave em as-is and let the reveal-clip on title handle it
+        }
+      });
+    };
+    walk(title);
+  });
+
+  // ── CURSOR SPOTLIGHT (gold glow follows mouse) ──
+  const spotlight = document.getElementById('spotlight');
+  let spotlightActive = false;
+  document.addEventListener('mousemove', (e) => {
+    spotlight.style.left = e.clientX + 'px';
+    spotlight.style.top = e.clientY + 'px';
+    if (!spotlightActive) {
+      spotlight.classList.add('active');
+      spotlightActive = true;
+    }
+  });
+  document.addEventListener('mouseleave', () => {
+    spotlight.classList.remove('active');
+    spotlightActive = false;
+  });
+
+  // ── MAGNETIC HERO TITLE ──
+  // Hero title subtly drifts toward the cursor for a premium feel.
+  const heroTitle = document.querySelector('.hero-title');
+  const heroSection = document.querySelector('.hero');
+  if (heroTitle && heroSection) {
+    document.addEventListener('mousemove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      const cx = window.innerWidth / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.015;
+      const dy = (e.clientY - cy) * 0.015;
+      heroTitle.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+  }
+
+  // ── 3D TILT ON CARDS (subtle perspective shift toward cursor) ──
+  function attachTilt(selector, maxTilt = 4) {
+    document.querySelectorAll(selector).forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const rx = ((e.clientY - cy) / rect.height) * -maxTilt;
+        const ry = ((e.clientX - cx) / rect.width) * maxTilt;
+        card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  }
+  attachTilt('.hiw-card', 5);
+  attachTilt('.rank-card', 6);
+  attachTilt('.badge-card', 6);
+  attachTilt('.vega-feat', 3);
+
+  // ── SECTION PROGRESS DOTS (active state syncs with current section) ──
+  const sections = ['waitlist','features','ranks','badges','vega','calendar','simulator','pricing'];
+  const dots = document.querySelectorAll('.progress-dot');
+  const dotMap = {};
+  dots.forEach((d, i) => {
+    dotMap[sections[i]] = d;
+  });
+
+  const dotObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        dots.forEach(d => d.classList.remove('active'));
+        const dot = dotMap[entry.target.id];
+        if (dot) dot.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -40% 0px' });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) dotObserver.observe(el);
+  });
+
+  // ── COUNTER ANIMATION ──
+  // Animates a number from 0 to its target with ease-out, then settles.
+  function animateCount(el, target, duration = 1600) {
+    const isFloat = target % 1 !== 0;
+    const startTime = performance.now();
+    function tick(now) {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const value = target * eased;
+      el.textContent = isFloat ? value.toFixed(2) : Math.floor(value).toLocaleString();
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = isFloat ? target.toFixed(2) : target.toLocaleString();
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Animate the waitlist count once it's loaded and hero is in view
+  const heroObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = document.getElementById('waitlistNum');
+        if (el && waitlistCount > 0) animateCount(el, waitlistCount, 1800);
+        heroObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  const heroEl = document.querySelector('.hero');
+  if (heroEl) heroObserver.observe(heroEl);
+
+  // Animate calendar stat numbers when section enters view
+  const calStatObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.cal-stat-value').forEach(el => {
+          const text = el.textContent;
+          const num = parseFloat(text.replace(/[^0-9.-]/g, ''));
+          if (!isNaN(num) && num !== 0) {
+            const prefix = text.match(/^[+\-]?\$?/)?.[0] || '';
+            const suffix = text.match(/[%]?$/)?.[0] || '';
+            const isFloat = text.includes('.');
+            const startTime = performance.now();
+            const target = num;
+            function tick(now) {
+              const t = Math.min((now - startTime) / 1600, 1);
+              const eased = 1 - Math.pow(1 - t, 3);
+              const v = target * eased;
+              el.textContent = prefix + (isFloat ? v.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') : Math.floor(v).toLocaleString()) + suffix;
+              if (t < 1) requestAnimationFrame(tick);
+              else el.textContent = text;
+            }
+            requestAnimationFrame(tick);
+          }
+        });
+        calStatObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  const calSection = document.getElementById('calendar');
+  if (calSection) calStatObserver.observe(calSection);
+
+  // Animate pricing amount $0 → $9.99
+  const pricingObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = document.querySelector('.pricing-amount');
+        if (el) {
+          const startTime = performance.now();
+          function tick(now) {
+            const t = Math.min((now - startTime) / 1400, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = '$' + (9.99 * eased).toFixed(2);
+            if (t < 1) requestAnimationFrame(tick);
+            else el.textContent = '$9.99';
+          }
+          requestAnimationFrame(tick);
+        }
+        pricingObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  const pricingEl = document.getElementById('pricing');
+  if (pricingEl) pricingObserver.observe(pricingEl);
+
+  // ── PARALLAX CANDLE BACKGROUND ──
+  // Candles drift up slightly on scroll for a subtle depth effect.
+  let lastScrollY = 0;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    lastScrollY = window.scrollY;
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const offset = lastScrollY * 0.15;
+        canvas.style.transform = `translateY(${-offset}px)`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 </script>
 </body>
 </html>
