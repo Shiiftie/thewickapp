@@ -1803,19 +1803,24 @@
   });
 
   // ── CANDLE BACKGROUND ──
-  // Steady scrolling candles with consistent sizing.
+  // Steady scrolling candles. The rightmost candle is "live" — its body
+  // and wicks update every frame as the price ticks, then it locks in
+  // when a new candle spawns behind it.
   const canvas = document.getElementById('candleCanvas');
   const ctx = canvas.getContext('2d');
 
-  const CANDLE_WIDTH = 44;     // visual width of each candle body
-  const CANDLE_SPACING = 58;   // distance between candle centers
-  const SCROLL_SPEED = 0.35;   // pixels per frame (~21 px/sec at 60fps)
-  const CANDLE_OPACITY = 0.14; // background subtlety
-  // Time to scroll one CANDLE_SPACING ≈ 58 / 0.35 / 60 = 2.76s — spawn matches
-  const SPAWN_INTERVAL = 2760;
+  const CANDLE_WIDTH = 44;       // visual width of each candle body
+  const CANDLE_SPACING = 58;     // distance between candle centers
+  const SCROLL_SPEED = 0.35;     // pixels per frame (~21 px/sec at 60fps)
+  const CANDLE_OPACITY = 0.14;   // background subtlety
+  const LERP = 0.05;             // smaller = smoother, slower price motion
 
   let candles = [];
-  let lastSpawn = 0;
+
+  // Live price state (animates the rightmost / "forming" candle)
+  let livePrice = 0;
+  let priceTarget = 0;
+  let nextTargetTime = 0;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -1824,14 +1829,13 @@
   resize();
   window.addEventListener('resize', resize);
 
-  function makeCandle(x, prevClose) {
+  // A fully-formed historical candle (OHLC fixed at creation)
+  function makeHistoricalCandle(x, prevClose) {
     const centerY = canvas.height / 2;
-    const open = prevClose !== null ? prevClose : centerY;
-    // Mean-reversion drift + bounded body so candles stay consistent in size
+    const open = prevClose;
     const drift = (centerY - open) * 0.04;
     const body = (Math.random() - 0.5) * 42 + drift;
     let close = open + body;
-    // Hard clamp so prices never run off the screen
     close = Math.max(canvas.height * 0.18, Math.min(canvas.height * 0.82, close));
     const wickTop = 6 + Math.random() * 14;
     const wickBot = 6 + Math.random() * 14;
@@ -1840,27 +1844,72 @@
       open, close,
       high: Math.min(open, close) - wickTop,
       low: Math.max(open, close) + wickBot,
+      live: false,
+    };
+  }
+
+  // A live candle starts as a tick (open == close, tiny wicks) and grows
+  function makeLiveCandle(x, prevClose) {
+    return {
+      x,
+      open: prevClose,
+      close: prevClose,
+      high: prevClose - 2,
+      low: prevClose + 2,
+      live: true,
     };
   }
 
   function initCandles() {
     candles = [];
-    const count = Math.ceil(window.innerWidth / CANDLE_SPACING) + 4;
+    const count = Math.ceil(canvas.width / CANDLE_SPACING) + 1;
+    const startX = canvas.width - (count - 1) * CANDLE_SPACING;
     let prevClose = canvas.height / 2;
-    for (let i = 0; i < count; i++) {
-      const c = makeCandle(i * CANDLE_SPACING, prevClose);
+    for (let i = 0; i < count - 1; i++) {
+      const c = makeHistoricalCandle(startX + i * CANDLE_SPACING, prevClose);
       candles.push(c);
       prevClose = c.close;
     }
+    // Last candle is the live one, parked at the right edge
+    candles.push(makeLiveCandle(startX + (count - 1) * CANDLE_SPACING, prevClose));
+    livePrice = prevClose;
+    priceTarget = prevClose;
+    nextTargetTime = 0;
   }
   initCandles();
   window.addEventListener('resize', initCandles);
 
   function spawnCandle() {
     const last = candles[candles.length - 1];
-    const x = last ? last.x + CANDLE_SPACING : canvas.width;
+    if (last) last.live = false; // lock in the previous live candle
     const prevClose = last ? last.close : canvas.height / 2;
-    candles.push(makeCandle(x, prevClose));
+    candles.push(makeLiveCandle(canvas.width, prevClose));
+    livePrice = prevClose;
+    priceTarget = prevClose;
+    nextTargetTime = 0;
+  }
+
+  // Smooth random-walk-with-mean-reversion price animation.
+  // Picks a new target every 300-800ms and lerps toward it every frame.
+  function updateLivePrice(timestamp) {
+    const live = candles[candles.length - 1];
+    if (!live || !live.live) return;
+
+    const centerY = canvas.height / 2;
+
+    if (timestamp > nextTargetTime) {
+      const drift = (centerY - livePrice) * 0.08;
+      priceTarget = livePrice + (Math.random() - 0.5) * 90 + drift;
+      priceTarget = Math.max(canvas.height * 0.2, Math.min(canvas.height * 0.8, priceTarget));
+      nextTargetTime = timestamp + 300 + Math.random() * 500;
+    }
+
+    livePrice += (priceTarget - livePrice) * LERP;
+
+    // Update body close + extend wicks if price reached a new extreme
+    live.close = livePrice;
+    if (livePrice < live.high) live.high = livePrice - 2;
+    if (livePrice > live.low)  live.low  = livePrice + 2;
   }
 
   function drawCandles() {
@@ -1893,17 +1942,19 @@
   }
 
   function animate(timestamp) {
-    // Scroll everything left at a steady rate
+    updateLivePrice(timestamp);
+
+    // Steady leftward scroll
     candles.forEach(c => c.x -= SCROLL_SPEED);
 
-    // Drop candles that have scrolled off the left edge
+    // Drop candles that scrolled off the left edge
     candles = candles.filter(c => c.x + CANDLE_WIDTH > -CANDLE_SPACING);
 
-    // Spawn a new candle on a steady cadence that matches scroll speed
-    if (timestamp - lastSpawn > SPAWN_INTERVAL) {
-      const lastX = candles.length ? candles[candles.length - 1].x : 0;
-      if (lastX < canvas.width) spawnCandle();
-      lastSpawn = timestamp;
+    // Spawn a new live candle when the previous one has scrolled inward
+    // by exactly one CANDLE_SPACING — keeps cadence perfectly even.
+    const last = candles[candles.length - 1];
+    if (!last || last.x < canvas.width - CANDLE_SPACING) {
+      spawnCandle();
     }
 
     drawCandles();
