@@ -586,40 +586,85 @@
     max-width: 420px;
     position: relative;
     margin: 0 auto;
+    transform-style: preserve-3d;
+    perspective: 1000px;
   }
   .vega-orb-core {
     position: absolute;
-    inset: 30%;
+    inset: 28%;
     border-radius: 50%;
-    background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold) 40%, var(--gold-dark) 80%, transparent 100%);
-    box-shadow: 0 0 80px var(--gold), 0 0 120px rgba(255,209,102,0.3);
+    background:
+      radial-gradient(circle at 30% 30%, #FFF5C8 0%, #FFE08A 18%, #FFD166 38%, #C9921A 70%, transparent 100%);
+    box-shadow:
+      inset 0 0 40px rgba(255, 245, 200, 0.4),
+      0 0 90px rgba(255, 209, 102, 0.65),
+      0 0 160px rgba(255, 209, 102, 0.3),
+      0 0 240px rgba(255, 209, 102, 0.12);
     animation: orbPulse 4s ease-in-out infinite;
+    transform: translateZ(30px);
   }
+  /* Conic shine layer — spinning highlight gives the orb a 3D feel */
+  .vega-orb-core::after {
+    content: '';
+    position: absolute;
+    inset: -2%;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255, 255, 255, 0.25) 30deg,
+      transparent 80deg,
+      rgba(255, 255, 255, 0.18) 200deg,
+      transparent 260deg
+    );
+    mix-blend-mode: overlay;
+    animation: orbSpin 8s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes orbSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* Three rings, each tilted on different 3D axes — feels like orbital paths */
   .vega-orb-ring {
     position: absolute;
-    inset: 15%;
     border: 1px solid rgba(255,209,102,0.3);
     border-radius: 50%;
-    animation: orbRotate 20s linear infinite;
+    transform-style: preserve-3d;
+  }
+  .vega-orb-ring:nth-child(1) {
+    inset: 5%;
+    border: 1px dashed rgba(255,209,102,0.18);
+    animation: orbRingTilt1 14s linear infinite;
   }
   .vega-orb-ring:nth-child(2) {
-    inset: 5%;
-    border: 1px dashed rgba(255,209,102,0.15);
-    animation: orbRotate 30s linear infinite reverse;
+    inset: 12%;
+    border-color: rgba(255,209,102,0.25);
+    animation: orbRingTilt2 18s linear infinite;
   }
   .vega-orb-ring:nth-child(3) {
     inset: 22%;
-    border-color: rgba(255,209,102,0.2);
-    animation: orbRotate 15s linear infinite;
+    border-color: rgba(255,209,102,0.35);
+    animation: orbRingTilt3 12s linear infinite;
+  }
+  @keyframes orbRingTilt1 {
+    from { transform: rotateX(70deg) rotateZ(0deg); }
+    to   { transform: rotateX(70deg) rotateZ(360deg); }
+  }
+  @keyframes orbRingTilt2 {
+    from { transform: rotateY(70deg) rotateZ(0deg); }
+    to   { transform: rotateY(70deg) rotateZ(-360deg); }
+  }
+  @keyframes orbRingTilt3 {
+    from { transform: rotateX(20deg) rotateY(-30deg) rotateZ(0deg); }
+    to   { transform: rotateX(20deg) rotateY(-30deg) rotateZ(360deg); }
   }
   @keyframes orbPulse {
-    0%, 100% { transform: scale(1); opacity: 0.95; }
-    50% { transform: scale(1.05); opacity: 1; }
+    0%, 100% { transform: translateZ(30px) scale(1);    opacity: 0.95; }
+    50%      { transform: translateZ(40px) scale(1.06); opacity: 1; }
   }
-  @keyframes orbRotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+
   .vega-orb-bars {
     position: absolute;
     inset: 0;
@@ -628,14 +673,16 @@
     justify-content: center;
     gap: 4px;
     pointer-events: none;
+    transform: translateZ(50px);
   }
   .vega-orb-bars span {
     width: 3px;
     height: 20px;
-    background: var(--gold);
+    background: linear-gradient(180deg, #FFF5C8, var(--gold));
     border-radius: 2px;
+    box-shadow: 0 0 8px var(--gold);
     animation: vegaBar 1.2s ease-in-out infinite;
-    opacity: 0.7;
+    opacity: 0.9;
   }
   .vega-orb-bars span:nth-child(1) { animation-delay: 0s; }
   .vega-orb-bars span:nth-child(2) { animation-delay: 0.1s; }
@@ -646,7 +693,7 @@
   .vega-orb-bars span:nth-child(7) { animation-delay: 0s; }
   @keyframes vegaBar {
     0%, 100% { height: 12px; }
-    50% { height: 56px; }
+    50%      { height: 56px; }
   }
 
   .vega-status {
