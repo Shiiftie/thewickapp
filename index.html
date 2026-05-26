@@ -75,6 +75,7 @@
     width: 100%;
     height: 100%;
     z-index: 0;
+    transition: opacity 0.4s ease;
   }
 
   .noise {
@@ -153,13 +154,13 @@
   .hero {
     position: relative;
     z-index: 2;
-    min-height: 100vh;
+    min-height: 92vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 160px 24px 80px;
+    padding: 130px 24px 60px;
   }
 
   .hero-eyebrow {
@@ -316,13 +317,13 @@
   section.content {
     position: relative;
     z-index: 2;
-    padding: 120px 48px;
+    padding: 70px 48px;
     max-width: 1280px;
     margin: 0 auto;
   }
 
   @media (max-width: 768px) {
-    section.content { padding: 80px 20px; }
+    section.content { padding: 48px 20px; }
   }
 
   .section-eyebrow {
@@ -331,7 +332,7 @@
     letter-spacing: 3px;
     color: var(--gold);
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -348,7 +349,7 @@
     font-size: clamp(48px, 7vw, 84px);
     line-height: 0.95;
     letter-spacing: 2px;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
   }
   .section-title em {
     font-family: 'Instrument Serif', serif;
@@ -360,10 +361,10 @@
 
   .section-lede {
     font-size: 17px;
-    line-height: 1.8;
+    line-height: 1.75;
     color: var(--text-muted);
     max-width: 640px;
-    margin-bottom: 64px;
+    margin-bottom: 40px;
   }
   .section-lede strong { color: var(--text); font-weight: 500; }
 
@@ -371,8 +372,8 @@
   .hiw-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-top: 40px;
+    gap: 18px;
+    margin-top: 24px;
   }
   @media (max-width: 900px) {
     .hiw-grid { grid-template-columns: 1fr; }
@@ -380,8 +381,8 @@
   .hiw-card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px;
+    border-radius: 18px;
+    padding: 26px;
     position: relative;
     transition: all 0.3s;
   }
@@ -391,25 +392,25 @@
   }
   .hiw-num {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 64px;
+    font-size: 52px;
     color: var(--gold);
     opacity: 0.2;
     line-height: 1;
     letter-spacing: 4px;
   }
   .hiw-icon {
-    font-size: 32px;
-    margin: 16px 0;
+    font-size: 28px;
+    margin: 12px 0;
   }
   .hiw-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
+    font-size: 26px;
     letter-spacing: 2px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   .hiw-text {
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.65;
     color: var(--text-muted);
   }
   .hiw-text strong { color: var(--text); font-weight: 500; }
@@ -421,8 +422,8 @@
   .ranks-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-top: 32px;
+    gap: 10px;
+    margin-top: 20px;
   }
   @media (max-width: 900px) { .ranks-grid { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 600px) { .ranks-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -430,8 +431,8 @@
   .rank-card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 16px;
+    border-radius: 12px;
+    padding: 16px 12px;
     text-align: center;
     position: relative;
     transition: all 0.3s;
@@ -485,8 +486,8 @@
   .badges-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-top: 32px;
+    gap: 10px;
+    margin-top: 20px;
   }
   @media (max-width: 900px) { .badges-grid { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 600px) { .badges-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -494,8 +495,8 @@
   .badge-card {
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 14px;
+    border-radius: 12px;
+    padding: 16px 12px;
     text-align: center;
     transition: all 0.3s;
     position: relative;
@@ -560,22 +561,22 @@
   /* ── VEGA SECTION ────────────────────────────────────── */
   .vega-section {
     position: relative;
-    padding: 120px 48px;
+    padding: 70px 48px;
     max-width: 1280px;
     margin: 0 auto;
   }
   @media (max-width: 768px) {
-    .vega-section { padding: 80px 20px; }
+    .vega-section { padding: 48px 20px; }
   }
 
   .vega-layout {
     display: grid;
     grid-template-columns: 1fr 420px;
-    gap: 64px;
+    gap: 48px;
     align-items: center;
   }
   @media (max-width: 900px) {
-    .vega-layout { grid-template-columns: 1fr; gap: 48px; }
+    .vega-layout { grid-template-columns: 1fr; gap: 36px; }
   }
 
   .vega-orb {
@@ -669,21 +670,21 @@
     animation: pulse 1.5s ease-in-out infinite;
   }
 
-  .vega-content h2 { margin-bottom: 24px; }
+  .vega-content h2 { margin-bottom: 18px; }
   .vega-features {
-    margin-top: 32px;
+    margin-top: 24px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
   .vega-feat {
     display: flex;
-    gap: 16px;
+    gap: 14px;
     align-items: flex-start;
-    padding: 18px;
+    padding: 14px;
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 12px;
     transition: all 0.2s;
   }
   .vega-feat:hover { border-color: var(--border-hover); }
@@ -714,7 +715,7 @@
 
   /* VEGA chat preview */
   .vega-chat {
-    margin-top: 40px;
+    margin-top: 28px;
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -787,11 +788,11 @@
   .cal-layout {
     display: grid;
     grid-template-columns: 1fr 420px;
-    gap: 64px;
+    gap: 48px;
     align-items: start;
   }
   @media (max-width: 900px) {
-    .cal-layout { grid-template-columns: 1fr; }
+    .cal-layout { grid-template-columns: 1fr; gap: 28px; }
   }
 
   .cal-stats {
@@ -945,7 +946,7 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
-    margin-top: 40px;
+    margin-top: 28px;
     font-family: 'DM Mono', monospace;
   }
   .sim-topbar {
@@ -1108,11 +1109,11 @@
   }
   .pricing-card {
     max-width: 480px;
-    margin: 48px auto 0;
+    margin: 32px auto 0;
     background: var(--bg2);
     border: 1px solid var(--border-hover);
-    border-radius: 24px;
-    padding: 48px 40px;
+    border-radius: 22px;
+    padding: 36px 32px;
     text-align: left;
     position: relative;
     overflow: hidden;
@@ -1232,9 +1233,9 @@
   .faq-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     max-width: 800px;
-    margin: 40px auto 0;
+    margin: 28px auto 0;
   }
   .faq-item {
     background: var(--bg2);
@@ -1286,11 +1287,84 @@
     line-height: 1.7;
   }
 
+  /* ── FOUNDER QUOTE ────────────────────────────────────── */
+  .founder-quote {
+    position: relative;
+    z-index: 2;
+    padding: 80px 24px 70px;
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .quote-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .quote-eyebrow::before,
+  .quote-eyebrow::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .quote-body {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(19px, 2.1vw, 26px);
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 44px;
+    letter-spacing: 0.2px;
+  }
+  .quote-body strong {
+    color: var(--gold);
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  .quote-divider {
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 18px;
+  }
+
+  .quote-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .quote-name {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 30px;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 768px) {
+    .founder-quote { padding: 56px 20px 44px; }
+    .quote-body { line-height: 1.6; }
+  }
+
   /* ── FOOTER ────────────────────────────────────── */
   footer {
     position: relative;
     z-index: 2;
-    padding: 60px 48px 40px;
+    padding: 44px 48px 32px;
     border-top: 1px solid var(--border);
     text-align: center;
   }
@@ -1359,21 +1433,20 @@
   }
 
   /* ── SCROLL REVEAL EFFECTS ────────────────────────────────────── */
-  /* Sections fade up with a slight scale-in when scrolled into view */
   .reveal {
     opacity: 0;
-    transform: translateY(48px);
-    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(28px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, opacity;
   }
   .reveal.in-view { opacity: 1; transform: translateY(0); }
 
   .reveal-scale {
     opacity: 0;
-    transform: scale(0.94) translateY(40px);
-    transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(0.96) translateY(24px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, opacity;
   }
   .reveal-scale.in-view { opacity: 1; transform: scale(1) translateY(0); }
@@ -1996,6 +2069,17 @@
   </div>
 </section>
 
+<!-- ── FOUNDER QUOTE ───────────────────────────── -->
+<section class="founder-quote section-accent">
+  <div class="quote-eyebrow reveal">From The Founder</div>
+  <p class="quote-body reveal">
+    I built Wick because I was tired of trading alone. The hardest part of this game isn't reading charts — <strong>it's reading yourself</strong>. I've passed Topstep evals and blown them up the next week. I've taken revenge trades with my hand on the mouse, knowing it was wrong, doing it anyway. If you've never been there, congratulations — this isn't for you. <strong>If you have, you already know what I'm building.</strong> Wick is the accountability partner I needed two years ago. Not a signal service. Not a guru. The thing that holds you to the plan you wrote when emotions weren't running you. We're not promising to make you rich. We're giving you the one thing that's ever made anyone consistent: <strong>a system that won't let you forget who you said you'd be.</strong>
+  </p>
+  <div class="quote-divider reveal"></div>
+  <div class="quote-title reveal">Founder</div>
+  <div class="quote-name reveal">Seth Slokan</div>
+</section>
+
 <!-- ── FOOTER ───────────────────────────── -->
 <footer>
   <div class="footer-logo">WICK</div>
@@ -2031,170 +2115,181 @@
     });
   });
 
-  // ── NAV SCROLL ──
+  // ── NAV SCROLL + CANDLE FADE ──
+  // Two things tied to scroll:
+  // 1) Nav gets a blurred background once scrolled
+  // 2) Candle background fades from full opacity (in hero) down to ~22%
+  //    as the user moves past the hero, so it stops competing with text.
   const nav = document.getElementById('nav');
+  const candleCanvas = document.getElementById('candleCanvas');
+
+  let scrollTicking = false;
+  function updateOnScroll() {
+    const scrollY = window.scrollY;
+    nav.classList.toggle('scrolled', scrollY > 50);
+
+    // Fade the candles based on how far past the hero you are.
+    // Full opacity until 30% of hero height, then linearly fade to 0.22.
+    const heroH = window.innerHeight;
+    const fadeStart = heroH * 0.30;
+    const fadeEnd = heroH * 0.90;
+    let t = (scrollY - fadeStart) / (fadeEnd - fadeStart);
+    t = Math.max(0, Math.min(1, t));
+    const opacity = 1 - t * 0.78; // fades from 1.0 → 0.22
+    candleCanvas.style.opacity = opacity.toFixed(3);
+
+    scrollTicking = false;
+  }
   window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 50);
-  });
+    if (!scrollTicking) {
+      requestAnimationFrame(updateOnScroll);
+      scrollTicking = true;
+    }
+  }, { passive: true });
+  updateOnScroll();
 
   // ── CANDLE BACKGROUND ──
-  // Steady scrolling candles. The rightmost candle is "live" — its body
-  // and wicks update every frame as the price ticks, then it locks in
-  // when a new candle spawns behind it.
+  // Stationary candles spread across the screen. Every candle is "live" —
+  // its wick extends dramatically up and down as its price oscillates.
+  // Massive amplitude, fast motion, smooth easing. Locked 60fps.
   const canvas = document.getElementById('candleCanvas');
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true });
 
-  const CANDLE_WIDTH = 44;       // visual width of each candle body
-  const CANDLE_SPACING = 58;     // distance between candle centers
-  const SCROLL_SPEED = 0.35;     // pixels per frame (~21 px/sec at 60fps)
-  const CANDLE_OPACITY = 0.24;   // background presence (higher = more visible)
-  const LERP = 0.05;             // smaller = smoother, slower price motion
-  const PRICE_MIN_PCT = 0.08;    // top boundary as % of canvas height
-  const PRICE_MAX_PCT = 0.92;    // bottom boundary as % of canvas height
+  const CANDLE_WIDTH = 50;        // body width
+  const CANDLE_GAP = 86;          // distance between candle centers
+  const OPACITY = 0.28;           // base visibility
+  const SWING_PCT = 0.46;         // max swing as fraction of canvas height (massive)
+  const LERP = 0.08;              // higher = price catches up to target faster
+  const DECAY = 0.0025;           // how fast wicks contract back to current price
+  const TARGET_MIN_MS = 200;      // shortest time between new price targets
+  const TARGET_MAX_MS = 520;      // longest time between new price targets
+  const RESET_MIN_MS = 3000;      // shortest time before a candle "closes" and resets
+  const RESET_MAX_MS = 5500;      // longest time before a candle resets
+  const TOP_BOUND_PCT = 0.04;     // hard top bound (% of canvas height)
+  const BOT_BOUND_PCT = 0.96;     // hard bottom bound (% of canvas height)
 
   let candles = [];
-
-  // Live price state (animates the rightmost / "forming" candle)
-  let livePrice = 0;
-  let priceTarget = 0;
-  let nextTargetTime = 0;
+  let prevTime = performance.now();
 
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
   resize();
-  window.addEventListener('resize', resize);
 
-  // A fully-formed historical candle (OHLC fixed at creation)
-  function makeHistoricalCandle(x, prevClose) {
-    const centerY = canvas.height / 2;
-    const open = prevClose;
-    const drift = (centerY - open) * 0.03;
-    const body = (Math.random() - 0.5) * 70 + drift;
-    let close = open + body;
-    close = Math.max(canvas.height * PRICE_MIN_PCT, Math.min(canvas.height * PRICE_MAX_PCT, close));
-    const wickTop = 8 + Math.random() * 26;
-    const wickBot = 8 + Math.random() * 26;
+  function makeCandle(x, baseY, now) {
     return {
-      x,
-      open, close,
-      high: Math.min(open, close) - wickTop,
-      low: Math.max(open, close) + wickBot,
-      live: false,
-    };
-  }
-
-  // A live candle starts as a tick (open == close, tiny wicks) and grows
-  function makeLiveCandle(x, prevClose) {
-    return {
-      x,
-      open: prevClose,
-      close: prevClose,
-      high: prevClose - 2,
-      low: prevClose + 2,
-      live: true,
+      x, baseY,
+      open: baseY,         // candle's open price (Y coord)
+      price: baseY,        // current "tick" price
+      target: baseY,       // where price is heading
+      high: baseY,         // wick top (smaller Y = higher on screen)
+      low: baseY,          // wick bottom (larger Y = lower on screen)
+      nextTargetTime: 0,
+      resetAt: now + RESET_MIN_MS + Math.random() * (RESET_MAX_MS - RESET_MIN_MS),
     };
   }
 
   function initCandles() {
+    const now = performance.now();
     candles = [];
-    const count = Math.ceil(canvas.width / CANDLE_SPACING) + 1;
-    const startX = canvas.width - (count - 1) * CANDLE_SPACING;
-    let prevClose = canvas.height / 2;
-    for (let i = 0; i < count - 1; i++) {
-      const c = makeHistoricalCandle(startX + i * CANDLE_SPACING, prevClose);
+    const cols = Math.ceil(canvas.width / CANDLE_GAP) + 1;
+    const startX = (canvas.width - (cols - 1) * CANDLE_GAP) / 2;
+    const baseY = canvas.height / 2;
+    for (let i = 0; i < cols; i++) {
+      const c = makeCandle(startX + i * CANDLE_GAP, baseY, now);
+      // Stagger initial reset times so candles don't all reset in sync
+      c.resetAt = now + Math.random() * RESET_MAX_MS;
       candles.push(c);
-      prevClose = c.close;
     }
-    // Last candle is the live one, parked at the right edge
-    candles.push(makeLiveCandle(startX + (count - 1) * CANDLE_SPACING, prevClose));
-    livePrice = prevClose;
-    priceTarget = prevClose;
-    nextTargetTime = 0;
   }
   initCandles();
-  window.addEventListener('resize', initCandles);
+  window.addEventListener('resize', () => { resize(); initCandles(); });
 
-  function spawnCandle() {
-    const last = candles[candles.length - 1];
-    if (last) last.live = false; // lock in the previous live candle
-    const prevClose = last ? last.close : canvas.height / 2;
-    candles.push(makeLiveCandle(canvas.width, prevClose));
-    livePrice = prevClose;
-    priceTarget = prevClose;
-    nextTargetTime = 0;
-  }
+  function animate(now) {
+    // delta-time normalized to a 60fps frame so easing rates stay consistent
+    // even if the browser hitches.
+    const dt = Math.min((now - prevTime) / 16.67, 3);
+    prevTime = now;
 
-  // Smooth random-walk-with-mean-reversion price animation.
-  // Picks a new target every 300-800ms and lerps toward it every frame.
-  function updateLivePrice(timestamp) {
-    const live = candles[candles.length - 1];
-    if (!live || !live.live) return;
+    const maxSwing = canvas.height * SWING_PCT;
+    const topBound = canvas.height * TOP_BOUND_PCT;
+    const botBound = canvas.height * BOT_BOUND_PCT;
 
-    const centerY = canvas.height / 2;
-
-    if (timestamp > nextTargetTime) {
-      const drift = (centerY - livePrice) * 0.06;
-      priceTarget = livePrice + (Math.random() - 0.5) * 140 + drift;
-      priceTarget = Math.max(canvas.height * PRICE_MIN_PCT, Math.min(canvas.height * PRICE_MAX_PCT, priceTarget));
-      nextTargetTime = timestamp + 300 + Math.random() * 500;
-    }
-
-    livePrice += (priceTarget - livePrice) * LERP;
-
-    // Update body close + extend wicks if price reached a new extreme
-    live.close = livePrice;
-    if (livePrice < live.high) live.high = livePrice - 2;
-    if (livePrice > live.low)  live.low  = livePrice + 2;
-  }
-
-  function drawCandles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    candles.forEach((c) => {
-      // close < open means price moved up on screen (canvas Y is inverted)
-      const isGreen = c.close < c.open;
-      const wickColor = isGreen ? `rgba(0,255,136,${CANDLE_OPACITY + 0.05})` : `rgba(255,68,102,${CANDLE_OPACITY + 0.05})`;
-      const bodyColor = isGreen ? `rgba(0,255,136,${CANDLE_OPACITY})` : `rgba(255,68,102,${CANDLE_OPACITY})`;
 
-      // wick
-      ctx.strokeStyle = wickColor;
-      ctx.lineWidth = 1.5;
+    for (let i = 0; i < candles.length; i++) {
+      const c = candles[i];
+
+      // ── PICK A NEW PRICE TARGET ──
+      // Rapid target changes drive the "massive movement" feel.
+      if (now > c.nextTargetTime) {
+        // Drift gently toward baseY so candles don't run off-screen
+        const drift = (c.baseY - c.price) * 0.04;
+        c.target = c.price + (Math.random() - 0.5) * maxSwing + drift;
+        // Clamp to viewport bounds
+        if (c.target < topBound) c.target = topBound;
+        else if (c.target > botBound) c.target = botBound;
+        c.nextTargetTime = now + TARGET_MIN_MS + Math.random() * (TARGET_MAX_MS - TARGET_MIN_MS);
+      }
+
+      // ── EASE PRICE TOWARD TARGET ──
+      // Lerp scaled by dt — same visual speed at any framerate.
+      const lerpFactor = 1 - Math.pow(1 - LERP, dt);
+      c.price += (c.target - c.price) * lerpFactor;
+
+      // ── EXTEND WICKS ON NEW EXTREMES ──
+      if (c.price < c.high) c.high = c.price;
+      if (c.price > c.low)  c.low  = c.price;
+
+      // ── DECAY WICKS BACK TOWARD CURRENT PRICE ──
+      // Slow contraction so wicks visibly "breathe" between extensions.
+      const decayFactor = 1 - Math.pow(1 - DECAY, dt);
+      c.high += (c.price - c.high) * decayFactor;
+      c.low  += (c.price - c.low)  * decayFactor;
+
+      // ── PERIODIC RESET ──
+      // The candle "closes" — new open, fresh wicks. Adds visual variety.
+      if (now > c.resetAt) {
+        c.open = c.price;
+        c.high = c.price;
+        c.low = c.price;
+        c.resetAt = now + RESET_MIN_MS + Math.random() * (RESET_MAX_MS - RESET_MIN_MS);
+      }
+
+      // ── DRAW ──
+      // Smaller Y = higher on screen, so isGreen when price closed ABOVE open
+      // means price < open (since price is the current close).
+      const isGreen = c.price < c.open;
+      const baseRgba = isGreen
+        ? `rgba(0,255,136,${OPACITY})`
+        : `rgba(255,68,102,${OPACITY})`;
+      const brightRgba = isGreen
+        ? `rgba(0,255,136,${OPACITY + 0.10})`
+        : `rgba(255,68,102,${OPACITY + 0.10})`;
+
+      const cx = c.x + CANDLE_WIDTH / 2;
+
+      // Wick (vertical line through center)
+      ctx.strokeStyle = brightRgba;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(c.x + CANDLE_WIDTH / 2, c.high);
-      ctx.lineTo(c.x + CANDLE_WIDTH / 2, c.low);
+      ctx.moveTo(cx, c.high);
+      ctx.lineTo(cx, c.low);
       ctx.stroke();
 
-      // body
-      ctx.fillStyle = bodyColor;
-      const top = Math.min(c.open, c.close);
-      const h = Math.max(Math.abs(c.close - c.open), 3);
-      ctx.fillRect(c.x, top, CANDLE_WIDTH, h);
+      // Body rectangle
+      const bodyTop = Math.min(c.open, c.price);
+      const bodyHeight = Math.max(Math.abs(c.price - c.open), 3);
+      ctx.fillStyle = baseRgba;
+      ctx.fillRect(c.x, bodyTop, CANDLE_WIDTH, bodyHeight);
 
-      // body outline for definition
-      ctx.strokeStyle = wickColor;
+      // Body outline for definition
+      ctx.strokeStyle = brightRgba;
       ctx.lineWidth = 1;
-      ctx.strokeRect(c.x, top, CANDLE_WIDTH, h);
-    });
-  }
-
-  function animate(timestamp) {
-    updateLivePrice(timestamp);
-
-    // Steady leftward scroll
-    candles.forEach(c => c.x -= SCROLL_SPEED);
-
-    // Drop candles that scrolled off the left edge
-    candles = candles.filter(c => c.x + CANDLE_WIDTH > -CANDLE_SPACING);
-
-    // Spawn a new live candle when the previous one has scrolled inward
-    // by exactly one CANDLE_SPACING — keeps cadence perfectly even.
-    const last = candles[candles.length - 1];
-    if (!last || last.x < canvas.width - CANDLE_SPACING) {
-      spawnCandle();
+      ctx.strokeRect(c.x, bodyTop, CANDLE_WIDTH, bodyHeight);
     }
 
-    drawCandles();
     requestAnimationFrame(animate);
   }
   requestAnimationFrame(animate);
@@ -2680,21 +2775,7 @@
   const pricingEl = document.getElementById('pricing');
   if (pricingEl) pricingObserver.observe(pricingEl);
 
-  // ── PARALLAX CANDLE BACKGROUND ──
-  // Candles drift up slightly on scroll for a subtle depth effect.
-  let lastScrollY = 0;
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    lastScrollY = window.scrollY;
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        const offset = lastScrollY * 0.15;
-        canvas.style.transform = `translateY(${-offset}px)`;
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
+  // Parallax depth is now handled inside the 3D scene via camera Z shift.
 </script>
 </body>
 </html>
