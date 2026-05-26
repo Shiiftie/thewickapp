@@ -1378,7 +1378,7 @@
 <section class="hero" id="waitlist">
   <div class="hero-eyebrow">
     <span class="dot"></span>
-    Launching August 1st, 2026
+    Launching July 1st, 2026
   </div>
   <h1 class="hero-title">WICK</h1>
   <p class="hero-subtitle">Inside a trader's mind.</p>
@@ -1732,7 +1732,7 @@
   <div class="faq-list">
     <div class="faq-item">
       <button class="faq-question" onclick="toggleFaq(this)">When does Wick launch?</button>
-      <div class="faq-answer"><div class="faq-answer-inner">Public launch is August 1st, 2026. Waitlist members get first access and locked-in early pricing.</div></div>
+      <div class="faq-answer"><div class="faq-answer-inner">Public launch is July 1st, 2026. Waitlist members get first access and locked-in early pricing.</div></div>
     </div>
     <div class="faq-item">
       <button class="faq-question" onclick="toggleFaq(this)">Is this another signals service?</button>
@@ -1799,9 +1799,19 @@
   });
 
   // ── CANDLE BACKGROUND ──
+  // Bigger candles that scroll right-to-left like a live chart.
+  // New candle forms on the right every ~800ms; whole thing drifts left.
   const canvas = document.getElementById('candleCanvas');
   const ctx = canvas.getContext('2d');
+
+  const CANDLE_WIDTH = 28;     // visual width of each candle
+  const CANDLE_SPACING = 36;   // distance between candle centers
+  const SCROLL_SPEED = 0.4;    // pixels per frame
+  const CANDLE_OPACITY = 0.12; // background subtlety
+
   let candles = [];
+  let lastSpawn = 0;
+  const SPAWN_INTERVAL = 800;  // ms between new candles
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -1812,53 +1822,95 @@
 
   function initCandles() {
     candles = [];
-    const count = Math.floor(window.innerWidth / 12);
-    let price = canvas.height / 2;
+    const count = Math.ceil(window.innerWidth / CANDLE_SPACING) + 4;
+    const centerY = canvas.height / 2;
+    let price = centerY;
     for (let i = 0; i < count; i++) {
-      const body = (Math.random() - 0.5) * 30;
+      const body = (Math.random() - 0.5) * 60;
       const open = price;
       const close = open + body;
+      const wickTop = Math.random() * 30;
+      const wickBot = Math.random() * 30;
       candles.push({
-        x: i * 12,
+        x: i * CANDLE_SPACING,
         open, close,
-        high: Math.max(open, close) - Math.random() * 14,
-        low: Math.min(open, close) + Math.random() * 14,
+        high: Math.min(open, close) - wickTop,
+        low: Math.max(open, close) + wickBot,
       });
-      price = close;
-      if (price < 100 || price > canvas.height - 100) price = canvas.height / 2;
+      // Mean-reversion so prices don't run off screen
+      const pull = (centerY - close) * 0.08;
+      price = close + pull;
     }
   }
   initCandles();
   window.addEventListener('resize', initCandles);
 
+  function spawnCandle() {
+    const last = candles[candles.length - 1];
+    const centerY = canvas.height / 2;
+    const body = (Math.random() - 0.5) * 60;
+    const open = last ? last.close : centerY;
+    let close = open + body;
+    // Mean-reversion pull toward center
+    close += (centerY - close) * 0.08;
+    const wickTop = Math.random() * 30;
+    const wickBot = Math.random() * 30;
+    candles.push({
+      x: last ? last.x + CANDLE_SPACING : canvas.width,
+      open, close,
+      high: Math.min(open, close) - wickTop,
+      low: Math.max(open, close) + wickBot,
+    });
+  }
+
   function drawCandles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     candles.forEach((c) => {
+      // close < open means price moved up on screen (canvas Y is inverted)
       const isGreen = c.close < c.open;
-      const color = isGreen ? 'rgba(0,255,136,0.06)' : 'rgba(255,68,102,0.06)';
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
+      const wickColor = isGreen ? `rgba(0,255,136,${CANDLE_OPACITY + 0.04})` : `rgba(255,68,102,${CANDLE_OPACITY + 0.04})`;
+      const bodyColor = isGreen ? `rgba(0,255,136,${CANDLE_OPACITY})` : `rgba(255,68,102,${CANDLE_OPACITY})`;
+
+      // wick
+      ctx.strokeStyle = wickColor;
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(c.x + 4, c.high);
-      ctx.lineTo(c.x + 4, c.low);
+      ctx.moveTo(c.x + CANDLE_WIDTH / 2, c.high);
+      ctx.lineTo(c.x + CANDLE_WIDTH / 2, c.low);
       ctx.stroke();
-      ctx.fillStyle = color;
+
+      // body
+      ctx.fillStyle = bodyColor;
       const top = Math.min(c.open, c.close);
-      const h = Math.abs(c.close - c.open);
-      ctx.fillRect(c.x + 1, top, 6, Math.max(h, 1));
+      const h = Math.max(Math.abs(c.close - c.open), 2);
+      ctx.fillRect(c.x, top, CANDLE_WIDTH, h);
+
+      // body outline for definition
+      ctx.strokeStyle = wickColor;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(c.x, top, CANDLE_WIDTH, h);
     });
   }
-  drawCandles();
 
-  // Slowly animate candles
-  setInterval(() => {
-    candles.forEach((c) => {
-      const shift = (Math.random() - 0.5) * 0.4;
-      c.open += shift; c.close += shift;
-      c.high += shift; c.low += shift;
-    });
+  function animate(timestamp) {
+    // Scroll everything left
+    candles.forEach(c => c.x -= SCROLL_SPEED);
+
+    // Drop candles that have scrolled off the left edge
+    candles = candles.filter(c => c.x + CANDLE_WIDTH > -CANDLE_SPACING);
+
+    // Spawn a new candle every SPAWN_INTERVAL ms
+    if (timestamp - lastSpawn > SPAWN_INTERVAL) {
+      const lastX = candles.length ? candles[candles.length - 1].x : 0;
+      // Only spawn if the last candle is on-screen, otherwise top up
+      if (lastX < canvas.width) spawnCandle();
+      lastSpawn = timestamp;
+    }
+
     drawCandles();
-  }, 200);
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
 
   // ── RANKS DATA ──
   const ranks = [
@@ -2000,7 +2052,7 @@
 
   // ── COUNTDOWN ──
   function updateCountdown() {
-    const launch = new Date('2026-08-01T09:00:00');
+    const launch = new Date('2026-07-01T09:00:00');
     const now = new Date();
     const diff = launch - now;
     if (diff <= 0) {
@@ -2069,8 +2121,24 @@
   }
 
   // ── WAITLIST (Brevo) ──
-  let waitlistCount = parseInt(localStorage.getItem('wickWaitlist') || '1247');
-  document.getElementById('waitlistNum').textContent = waitlistCount.toLocaleString();
+  // Fetches the real subscriber count from /api/count (live Brevo total).
+  let waitlistCount = 0;
+
+  async function fetchWaitlistCount() {
+    try {
+      const response = await fetch('/api/count');
+      if (response.ok) {
+        const data = await response.json();
+        waitlistCount = data.count || 0;
+        document.getElementById('waitlistNum').textContent = waitlistCount.toLocaleString();
+      }
+    } catch (err) {
+      // Fall back to localStorage if the endpoint is unreachable
+      waitlistCount = parseInt(localStorage.getItem('wickWaitlist') || '0');
+      document.getElementById('waitlistNum').textContent = waitlistCount.toLocaleString();
+    }
+  }
+  fetchWaitlistCount();
 
   async function joinBrevoWaitlist(inputId) {
     const input = document.getElementById(inputId);
@@ -2091,11 +2159,10 @@
       });
       const data = await response.json();
       if (data.success) {
-        waitlistCount++;
-        localStorage.setItem('wickWaitlist', waitlistCount);
-        document.getElementById('waitlistNum').textContent = waitlistCount.toLocaleString();
+        // Re-pull the live count from Brevo after a successful signup
+        fetchWaitlistCount();
         input.value = '';
-        showToast('🔥 You are on the list. See you August 1st!');
+        showToast('🔥 You are on the list. See you July 1st!');
       } else if (data.duplicate) {
         showToast('👀 You are already on the list!');
       } else {
