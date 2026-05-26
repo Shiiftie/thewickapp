@@ -88,9 +88,10 @@
   /* ── NAV ────────────────────────────────────────── */
   nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
+    top: 42px;
+    left: 0; right: 0;
     z-index: 100;
-    padding: 24px 48px;
+    padding: 20px 48px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -143,7 +144,7 @@
   }
 
   @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
+    nav { padding: 14px 20px; top: 38px; }
     .nav-right { gap: 12px; }
     .nav-link { display: none; }
   }
@@ -158,7 +159,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 120px 24px 80px;
+    padding: 160px 24px 80px;
   }
 
   .hero-eyebrow {
@@ -1190,20 +1191,23 @@
     color: var(--text-muted);
   }
 
-  /* ── TICKER ────────────────────────────────────── */
+  /* ── TICKER (top bar) ────────────────────────────────────── */
   .ticker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     overflow: hidden;
-    border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    background: rgba(0,0,0,0.4);
-    padding: 16px 0;
-    position: relative;
-    z-index: 2;
+    background: rgba(8,8,10,0.92);
+    backdrop-filter: blur(20px);
+    padding: 10px 0;
+    z-index: 101;
   }
   .ticker-track {
     display: flex;
     gap: 48px;
-    animation: ticker 40s linear infinite;
+    animation: ticker 60s linear infinite;
     white-space: nowrap;
   }
   @keyframes ticker {
@@ -1214,7 +1218,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-muted);
   }
   .ticker-item span { color: var(--gold); font-weight: 600; }
@@ -1357,6 +1361,11 @@
 </head>
 <body>
 
+<!-- ── TICKER (fixed top bar) ───────────────────────────── -->
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
 <div class="cursor"></div>
 <div class="cursor-ring"></div>
 <canvas id="candleCanvas"></canvas>
@@ -1399,11 +1408,6 @@
     <div class="cd-box"><div class="cd-num" id="cdSecs">00</div><div class="cd-label">Secs</div></div>
   </div>
 </section>
-
-<!-- ── TICKER ───────────────────────────── -->
-<div class="ticker">
-  <div class="ticker-track" id="tickerTrack"></div>
-</div>
 
 <!-- ── HOW IT WORKS ───────────────────────────── -->
 <section class="content" id="features">
@@ -1799,19 +1803,19 @@
   });
 
   // ── CANDLE BACKGROUND ──
-  // Bigger candles that scroll right-to-left like a live chart.
-  // New candle forms on the right every ~800ms; whole thing drifts left.
+  // Steady scrolling candles with consistent sizing.
   const canvas = document.getElementById('candleCanvas');
   const ctx = canvas.getContext('2d');
 
-  const CANDLE_WIDTH = 28;     // visual width of each candle
-  const CANDLE_SPACING = 36;   // distance between candle centers
-  const SCROLL_SPEED = 0.4;    // pixels per frame
-  const CANDLE_OPACITY = 0.12; // background subtlety
+  const CANDLE_WIDTH = 44;     // visual width of each candle body
+  const CANDLE_SPACING = 58;   // distance between candle centers
+  const SCROLL_SPEED = 0.35;   // pixels per frame (~21 px/sec at 60fps)
+  const CANDLE_OPACITY = 0.14; // background subtlety
+  // Time to scroll one CANDLE_SPACING ≈ 58 / 0.35 / 60 = 2.76s — spawn matches
+  const SPAWN_INTERVAL = 2760;
 
   let candles = [];
   let lastSpawn = 0;
-  const SPAWN_INTERVAL = 800;  // ms between new candles
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -1820,26 +1824,33 @@
   resize();
   window.addEventListener('resize', resize);
 
+  function makeCandle(x, prevClose) {
+    const centerY = canvas.height / 2;
+    const open = prevClose !== null ? prevClose : centerY;
+    // Mean-reversion drift + bounded body so candles stay consistent in size
+    const drift = (centerY - open) * 0.04;
+    const body = (Math.random() - 0.5) * 42 + drift;
+    let close = open + body;
+    // Hard clamp so prices never run off the screen
+    close = Math.max(canvas.height * 0.18, Math.min(canvas.height * 0.82, close));
+    const wickTop = 6 + Math.random() * 14;
+    const wickBot = 6 + Math.random() * 14;
+    return {
+      x,
+      open, close,
+      high: Math.min(open, close) - wickTop,
+      low: Math.max(open, close) + wickBot,
+    };
+  }
+
   function initCandles() {
     candles = [];
     const count = Math.ceil(window.innerWidth / CANDLE_SPACING) + 4;
-    const centerY = canvas.height / 2;
-    let price = centerY;
+    let prevClose = canvas.height / 2;
     for (let i = 0; i < count; i++) {
-      const body = (Math.random() - 0.5) * 60;
-      const open = price;
-      const close = open + body;
-      const wickTop = Math.random() * 30;
-      const wickBot = Math.random() * 30;
-      candles.push({
-        x: i * CANDLE_SPACING,
-        open, close,
-        high: Math.min(open, close) - wickTop,
-        low: Math.max(open, close) + wickBot,
-      });
-      // Mean-reversion so prices don't run off screen
-      const pull = (centerY - close) * 0.08;
-      price = close + pull;
+      const c = makeCandle(i * CANDLE_SPACING, prevClose);
+      candles.push(c);
+      prevClose = c.close;
     }
   }
   initCandles();
@@ -1847,20 +1858,9 @@
 
   function spawnCandle() {
     const last = candles[candles.length - 1];
-    const centerY = canvas.height / 2;
-    const body = (Math.random() - 0.5) * 60;
-    const open = last ? last.close : centerY;
-    let close = open + body;
-    // Mean-reversion pull toward center
-    close += (centerY - close) * 0.08;
-    const wickTop = Math.random() * 30;
-    const wickBot = Math.random() * 30;
-    candles.push({
-      x: last ? last.x + CANDLE_SPACING : canvas.width,
-      open, close,
-      high: Math.min(open, close) - wickTop,
-      low: Math.max(open, close) + wickBot,
-    });
+    const x = last ? last.x + CANDLE_SPACING : canvas.width;
+    const prevClose = last ? last.close : canvas.height / 2;
+    candles.push(makeCandle(x, prevClose));
   }
 
   function drawCandles() {
@@ -1868,7 +1868,7 @@
     candles.forEach((c) => {
       // close < open means price moved up on screen (canvas Y is inverted)
       const isGreen = c.close < c.open;
-      const wickColor = isGreen ? `rgba(0,255,136,${CANDLE_OPACITY + 0.04})` : `rgba(255,68,102,${CANDLE_OPACITY + 0.04})`;
+      const wickColor = isGreen ? `rgba(0,255,136,${CANDLE_OPACITY + 0.05})` : `rgba(255,68,102,${CANDLE_OPACITY + 0.05})`;
       const bodyColor = isGreen ? `rgba(0,255,136,${CANDLE_OPACITY})` : `rgba(255,68,102,${CANDLE_OPACITY})`;
 
       // wick
@@ -1882,7 +1882,7 @@
       // body
       ctx.fillStyle = bodyColor;
       const top = Math.min(c.open, c.close);
-      const h = Math.max(Math.abs(c.close - c.open), 2);
+      const h = Math.max(Math.abs(c.close - c.open), 3);
       ctx.fillRect(c.x, top, CANDLE_WIDTH, h);
 
       // body outline for definition
@@ -1893,16 +1893,15 @@
   }
 
   function animate(timestamp) {
-    // Scroll everything left
+    // Scroll everything left at a steady rate
     candles.forEach(c => c.x -= SCROLL_SPEED);
 
     // Drop candles that have scrolled off the left edge
     candles = candles.filter(c => c.x + CANDLE_WIDTH > -CANDLE_SPACING);
 
-    // Spawn a new candle every SPAWN_INTERVAL ms
+    // Spawn a new candle on a steady cadence that matches scroll speed
     if (timestamp - lastSpawn > SPAWN_INTERVAL) {
       const lastX = candles.length ? candles[candles.length - 1].x : 0;
-      // Only spawn if the last candle is on-screen, otherwise top up
       if (lastX < canvas.width) spawnCandle();
       lastSpawn = timestamp;
     }
