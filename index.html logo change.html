@@ -197,77 +197,14 @@
     font-size: clamp(80px, 16vw, 180px);
     line-height: 0.85;
     letter-spacing: 4px;
-    position: relative;
-    display: block;
-  }
-
-  /* Inner wrapper for WICK text — separates magnetic drift (on .hero-title)
-     from the pulse animation (here) so they can coexist without conflict. */
-  .hero-title-text {
-    display: inline-block;
-    background: linear-gradient(
-      100deg,
-      #C9921A 0%, #FFD166 30%, #FFF5C8 50%, #FFD166 70%, #C9921A 100%
-    );
-    background-size: 200% 100%;
+    background: linear-gradient(180deg, #FFD166 0%, #C9921A 60%, rgba(201,146,26,0.4) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     opacity: 0;
-    animation:
-      fadeUp 0.8s ease 0.4s both,
-      wickShimmer 5s ease-in-out 1.4s infinite,
-      wickGlow 4s ease-in-out 1.4s infinite;
-    will-change: transform, filter, background-position;
+    animation: fadeUp 0.8s ease 0.4s both;
+    position: relative;
   }
-
-  /* ═══ OPTION 5 — SHIMMER + PULSE (currently active) ═══ */
-  @keyframes wickShimmer {
-    0%   { background-position: 200% 50%; }
-    100% { background-position: -100% 50%; }
-  }
-  @keyframes wickGlow {
-    0%, 100% {
-      transform: scale(1);
-      filter:
-        drop-shadow(0 0 18px rgba(255, 209, 102, 0.18))
-        drop-shadow(0 8px 16px rgba(201, 146, 26, 0.22))
-        drop-shadow(0 24px 48px rgba(0, 0, 0, 0.55));
-    }
-    50% {
-      transform: scale(1.015);
-      filter:
-        drop-shadow(0 0 26px rgba(255, 209, 102, 0.28))
-        drop-shadow(0 8px 18px rgba(201, 146, 26, 0.3))
-        drop-shadow(0 24px 48px rgba(0, 0, 0, 0.55));
-    }
-  }
-
-  /* ═══ OPTION 3 — PULSE / BREATHE (swap-in instructions) ═══
-     To switch back to Option 3 instead of Option 5:
-       1. In .hero-title-text above, replace the `background:` and `background-size:` lines with:
-            background: linear-gradient(180deg, #FFD166 0%, #C9921A 60%, rgba(201,146,26,0.4) 100%);
-       2. In .hero-title-text, replace the wickShimmer + wickGlow animation lines with:
-            wickPulse 4s ease-in-out 1.4s infinite
-       3. Uncomment the @keyframes wickPulse block below.
-
-  @keyframes wickPulse {
-    0%, 100% {
-      transform: scale(1);
-      filter:
-        drop-shadow(0 0 30px rgba(255, 209, 102, 0.35))
-        drop-shadow(0 8px 16px rgba(201, 146, 26, 0.4))
-        drop-shadow(0 24px 48px rgba(0, 0, 0, 0.6));
-    }
-    50% {
-      transform: scale(1.025);
-      filter:
-        drop-shadow(0 0 50px rgba(255, 209, 102, 0.55))
-        drop-shadow(0 8px 24px rgba(201, 146, 26, 0.55))
-        drop-shadow(0 24px 48px rgba(0, 0, 0, 0.6));
-    }
-  }
-  */
 
   .hero-subtitle {
     font-family: 'Instrument Serif', serif;
@@ -352,6 +289,82 @@
     opacity: 0;
     animation: fadeUp 0.8s ease 1.4s both;
   }
+
+  /* ── WICK IS LIVE BANNER ────────────────────── */
+  .live-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: 6px;
+    background: linear-gradient(135deg, #FFD166, #FFE08A, #C9921A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-top: 36px;
+    padding: 8px 24px;
+    border: 1.5px solid rgba(255,209,102,0.35);
+    border-radius: 100px;
+    background-color: rgba(255,209,102,0.04);
+    text-shadow: 0 0 30px rgba(255,209,102,0.4);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s both, liveBannerGlow 2.8s ease-in-out 1.8s infinite;
+  }
+  .live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #00FF88;
+    box-shadow: 0 0 12px #00FF88, 0 0 24px rgba(0,255,136,0.4);
+    animation: livePulse 1.4s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes liveBannerGlow {
+    0%, 100% {
+      box-shadow: 0 0 30px rgba(255,209,102,0.15), inset 0 0 0 rgba(255,209,102,0);
+      border-color: rgba(255,209,102,0.35);
+    }
+    50% {
+      box-shadow: 0 0 50px rgba(255,209,102,0.3), inset 0 0 20px rgba(255,209,102,0.05);
+      border-color: rgba(255,209,102,0.5);
+    }
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+  }
+
+  /* ── GET STARTED BUTTON ────────────────────── */
+  .get-started-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 48px;
+    margin-top: 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+    border: none;
+    border-radius: 100px;
+    color: #000;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.2s both;
+    box-shadow: 0 10px 30px rgba(255,209,102,0.2), 0 0 0 0 rgba(255,209,102,0.4);
+    position: relative;
+  }
+  .get-started-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 16px 50px rgba(255,209,102,0.4), 0 0 0 8px rgba(255,209,102,0.08);
+  }
+
   .cd-box {
     background: var(--bg2);
     border: 1px solid var(--border);
@@ -1797,7 +1810,7 @@
     <a href="#ranks" class="nav-link">Ranks</a>
     <a href="#vega" class="nav-link">VEGA</a>
     <a href="#pricing" class="nav-link">Pricing</a>
-    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+    <a href="https://app.thewickapp.com" class="nav-cta">Sign Up</a>
   </div>
 </nav>
 
@@ -1805,26 +1818,24 @@
 <section class="hero" id="waitlist">
   <div class="hero-eyebrow">
     <span class="dot"></span>
-    Launching July 1st, 2026
+    Now Live
   </div>
-  <h1 class="hero-title"><span class="hero-title-text">WICK</span></h1>
+  <h1 class="hero-title">WICK</h1>
   <p class="hero-subtitle">Inside a trader's mind.</p>
   <p class="hero-desc">
     The trading journal built for traders who are <strong>tired of trading alone</strong>.
     Log every session. Climb 12 ranks. Unlock badges. Trade with <strong>VEGA</strong>, your AI
     accountability partner. <strong>This is your edge.</strong>
   </p>
-  <form class="waitlist-form" onsubmit="event.preventDefault(); joinBrevoWaitlist('heroEmail')">
-    <input id="heroEmail" type="email" class="waitlist-input" placeholder="your@email.com" required>
-    <button type="submit" class="waitlist-btn">Join the Waitlist</button>
-  </form>
-  <p class="waitlist-count"><span id="waitlistNum">1,247</span> traders already on the list</p>
-  <div class="countdown">
-    <div class="cd-box"><div class="cd-num" id="cdDays">00</div><div class="cd-label">Days</div></div>
-    <div class="cd-box"><div class="cd-num" id="cdHours">00</div><div class="cd-label">Hours</div></div>
-    <div class="cd-box"><div class="cd-num" id="cdMins">00</div><div class="cd-label">Mins</div></div>
-    <div class="cd-box"><div class="cd-num" id="cdSecs">00</div><div class="cd-label">Secs</div></div>
+
+  <div class="live-banner">
+    <span class="live-dot"></span>
+    WICK IS LIVE
   </div>
+
+  <a href="https://app.thewickapp.com" class="get-started-btn">Get Started →</a>
+
+  <p class="waitlist-count"><span id="waitlistNum">1</span> <span id="userLabel">monthly user</span></p>
 </section>
 
 <!-- ── HOW IT WORKS ───────────────────────────── -->
@@ -2145,7 +2156,7 @@
       <li><span class="pricing-check">✓</span> Weekly & monthly leaderboards</li>
       <li><span class="pricing-check">✓</span> Goal tracker + trading rules engine</li>
     </ul>
-    <a href="#waitlist" class="pricing-cta" style="display:block;text-align:center;text-decoration:none;">Join the Waitlist</a>
+    <a href="https://app.thewickapp.com" class="pricing-cta" style="display:block;text-align:center;text-decoration:none;">Get Started</a>
     <p class="pricing-note">Cancel anytime. No hidden fees.</p>
   </div>
 </section>
@@ -2156,8 +2167,8 @@
   <h2 class="section-title reveal-clip">The <em>quick answers.</em></h2>
   <div class="faq-list stagger">
     <div class="faq-item">
-      <button class="faq-question" onclick="toggleFaq(this)">When does Wick launch?</button>
-      <div class="faq-answer"><div class="faq-answer-inner">Public launch is July 1st, 2026. Waitlist members get first access and locked-in early pricing.</div></div>
+      <button class="faq-question" onclick="toggleFaq(this)">Is Wick live?</button>
+      <div class="faq-answer"><div class="faq-answer-inner">Yes — Wick is officially live. Sign up, claim your username, and start logging your sessions today.</div></div>
     </div>
     <div class="faq-item">
       <button class="faq-question" onclick="toggleFaq(this)">Is this another signals service?</button>
@@ -2545,26 +2556,8 @@
   setTimeout(drawSimChart, 100);
   window.addEventListener('resize', () => setTimeout(drawSimChart, 100));
 
-  // ── COUNTDOWN ──
-  function updateCountdown() {
-    const launch = new Date('2026-07-01T09:00:00');
-    const now = new Date();
-    const diff = launch - now;
-    if (diff <= 0) {
-      ['cdDays','cdHours','cdMins','cdSecs'].forEach(id => document.getElementById(id).textContent = '00');
-      return;
-    }
-    const days = Math.floor(diff / 86400000);
-    const hours = Math.floor((diff % 86400000) / 3600000);
-    const mins = Math.floor((diff % 3600000) / 60000);
-    const secs = Math.floor((diff % 60000) / 1000);
-    document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
-    document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('cdMins').textContent = String(mins).padStart(2, '0');
-    document.getElementById('cdSecs').textContent = String(secs).padStart(2, '0');
-  }
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
+  // ── COUNTDOWN ── (no longer used — Wick is live)
+  // Countdown elements were removed from the hero section.
 
   // ── TICKER ──
   const tickerItems = [
@@ -2615,60 +2608,51 @@
     }, 3500);
   }
 
-  // ── WAITLIST (Brevo) ──
-  // Fetches the real subscriber count from /api/count (live Brevo total).
-  let waitlistCount = 0;
+  // ── LIVE USER COUNT (Supabase) ──
+  // Pulls the live count of subscribed users from Supabase.
+  // Falls back to "1 monthly user" if the request fails.
+  const SUPABASE_URL = 'https://hhxxrhtzhfmfudpmznkx.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoeHhyaHR6aGZtZnVkcG16bmt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzk1MjksImV4cCI6MjA5NDg1NTUyOX0.OyQQdZ9KQMAsDDeu7559Cd-3_zP5sI1VcTIXTNmXi_w';
+  let waitlistCount = 1;
 
-  async function fetchWaitlistCount() {
+  async function fetchUserCount() {
     try {
-      const response = await fetch('/api/count');
-      if (response.ok) {
-        const data = await response.json();
-        waitlistCount = data.count || 0;
-        document.getElementById('waitlistNum').textContent = waitlistCount.toLocaleString();
+      // Query the profiles table for count of subscribed users.
+      // Uses Prefer: count=exact header to get total count without returning rows.
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/profiles?is_subscribed=eq.true&select=id`,
+        {
+          method: 'HEAD',
+          headers: {
+            'apikey': SUPABASE_ANON,
+            'Authorization': `Bearer ${SUPABASE_ANON}`,
+            'Prefer': 'count=exact',
+            'Range-Unit': 'items',
+            'Range': '0-0'
+          }
+        }
+      );
+      // The total count is in the Content-Range header: "0-0/247"
+      const contentRange = response.headers.get('Content-Range');
+      if (contentRange) {
+        const total = parseInt(contentRange.split('/')[1]);
+        if (!isNaN(total) && total > 0) {
+          waitlistCount = total;
+        }
       }
     } catch (err) {
-      // Fall back to localStorage if the endpoint is unreachable
-      waitlistCount = parseInt(localStorage.getItem('wickWaitlist') || '0');
-      document.getElementById('waitlistNum').textContent = waitlistCount.toLocaleString();
+      // Silently fall back to default — 1 monthly user
     }
+    // Update the display
+    const numEl = document.getElementById('waitlistNum');
+    const labelEl = document.getElementById('userLabel');
+    if (numEl) numEl.textContent = waitlistCount.toLocaleString();
+    if (labelEl) labelEl.textContent = waitlistCount === 1 ? 'monthly user' : 'monthly users';
   }
-  fetchWaitlistCount();
+  fetchUserCount();
 
-  async function joinBrevoWaitlist(inputId) {
-    const input = document.getElementById(inputId);
-    const email = input.value.trim();
-    if (!email || !email.includes('@')) {
-      showToast('⚠️ Please enter a valid email.');
-      return;
-    }
-    const btn = input.nextElementSibling;
-    const originalText = btn.textContent;
-    btn.textContent = 'JOINING...';
-    btn.disabled = true;
-    try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      const data = await response.json();
-      if (data.success) {
-        // Re-pull the live count from Brevo after a successful signup
-        fetchWaitlistCount();
-        input.value = '';
-        showToast('🔥 You are on the list. See you July 1st!');
-      } else if (data.duplicate) {
-        showToast('👀 You are already on the list!');
-      } else {
-        showToast('⚠️ Something went wrong. Try again.');
-      }
-    } catch (err) {
-      showToast('⚠️ Connection error. Try again.');
-    }
-    btn.textContent = originalText;
-    btn.disabled = false;
-  }
+  // Legacy stub — kept so anything still calling joinBrevoWaitlist doesn't error
+  async function joinBrevoWaitlist() { /* no-op since waitlist removed */ }
   window.joinBrevoWaitlist = joinBrevoWaitlist;
   window.toggleFaq = toggleFaq;
 
